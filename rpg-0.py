@@ -25,7 +25,7 @@ options = """
 """
 
 def main():
-    if goblin.alive() and hero.alive():
+  while goblin.alive() and hero.alive():
         print (options)
         hero.print_status()
         goblin.print_status()
@@ -38,19 +38,14 @@ def main():
                 print ("The goblin is dead.")
                 
         elif user_input == 2:
-            pass
+            hero.alive() and goblin.alive()
+            goblin.attack(hero)     
+            if not hero.alive():
+                print ("You are dead.")
         elif user_input == 3:
             print ("Goodbye.")   
         else:
             print ("Invalid input %d") % user_input
-            main()
-    
-    if hero.alive() and goblin.alive():
-        goblin.attack(hero)     
-        if not hero.alive():
-            print ("You are dead.")
-    
-    if hero.alive() and goblin.alive():
-        main()
+        break    
 
 main()
