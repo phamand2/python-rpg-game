@@ -1,51 +1,112 @@
-class Character():
-    def __init__(self, name, health, power):
-        self.name = name
-        self.health = health
-        self.power = power
+import random
+import time
 
-    def print_status(self):
-        print(f"{self.name} has {self.health} health level left.")
+class Character:
+  def __init__(self,name, health, power, coins):
+    self.name = '<undefined>'
+    self.health = health
+    self.power = power
+    self.coins = coins
 
-    def attack(self, enemy):
-        enemy.health -= self.power
-        return enemy.health
+  def alive (self):
+    if self.health > 0:
+      return True
+    else:
+      return False 
 
-    def alive(self):
-        if self.health > 0:
-            return True
-        return False
+  def attack(self, enemey):
+    enemey.health -= self.power
+    print(f'{self.name} did {self.power} damage to {enemey.name}')    
 
-hero = Character("Hero", 10, 5)
-goblin = Character("Goblin", 6, 2)
-options = """
+  def print_status(self):
+    print(f'{self.name} has {self.health} health and {self.power} power.')  
+
+
+class Hero(Character):
+  def __init__(self):
+    self.name = 'Alex'
+    self.health = 10
+    self.power = 5
+
+  def attack(self, enemey):
+      double_damage = random.random() < 0.2
+      if double_damage:
+        enemey.health -= self.power * 2 
+        
+
+
+class Goblin(Character):
+  def __init__(self):
+    self.name = 'Pepe'
+    self.health = 6
+    self.power = 2
+
+
+
+
+class Medic(Character):
+  def __init__(self):
+    self.health = 'Medic'
+    self.health = 10
+    self.power = 5
+
+  def receive_damage(self, points):
+    self.health -= points
+    print(f'{self.name} received {points} damage.')
+    recuperate = random.random() < 0.2
+    if recuperate:
+      self.health += 2
+    if self.health <= 0:
+      print(f'{self.name} is dead.')
+
+class Shadow(Character):
+  def __init__(self):
+    self.name = 'Shadow'
+    self.health = 1
+    self.power = 5
+
+  def receive_damage(self, points):
+    if random.random() >= 0.10:
+      print("Shadow didn't take damage.")
+    else:
+      self.health -= points
+      print(f'{self.name} received {points} damage.') 
+      if self.health <= 0:
+        print(f'{self.name} is dead.')
+
+  
+
+hero = Hero()
+goblin = Goblin()
+options = '''
 1. fight goblin
-2. do nothing
+2. do nothing - in which case the goblin will attack him anyway
 3. flee
-"""
+'''
 
 def main():
   while goblin.alive() and hero.alive():
-        print (options)
-        hero.print_status()
-        goblin.print_status()
-        user_input = int(input("What do you want to do? "))
-        if user_input == 1:
-            # Hero attacks goblin
-            hero.attack(goblin)
-            # conditional outcomes of attack    
-            if not goblin.alive():
-                print ("The goblin is dead.")
-                
-        elif user_input == 2:
-            hero.alive() and goblin.alive()
-            goblin.attack(hero)     
-            if not hero.alive():
-                print ("You are dead.")
-        elif user_input == 3:
-            print ("Goodbye.")   
-        else:
-            print ("Invalid input %d") % user_input
-        break    
+    hero.print_status()
+    goblin.print_status()
+    print(options)
+    user_input = input('What do you want to do? ')
+    if user_input == "1":
+        # Hero attacks goblin
+        hero.attack(goblin)
+        if goblin.alive() == False:
+            print("The goblin is dead.")
+    elif user_input == "2":
+        pass
+    elif user_input == "3":
+        print("Goodbye.")
+        break
+    else:
+        print("Invalid input %r" % user_input)
+
+    if goblin.health > 0:
+        # Goblin attacks hero
+        goblin.attack(hero)
+        if hero.health <= 0:
+            print("You are dead.")
 
 main()
