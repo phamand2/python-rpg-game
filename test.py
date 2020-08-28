@@ -67,6 +67,36 @@ class Wizard(Character):
         if swap_power:
             self.power, enemy.power = enemy.power, self.power
 
+class Medic(Character):
+  def __init__(self):
+    self.health = 'Medic'
+    self.health = 10
+    self.power = 5
+
+  def receive_damage(self, points):
+    self.health -= points
+    print(f'{self.name} received {points} damage.')
+    recuperate = random.random() < 0.2
+    if recuperate:
+      self.health += 2
+    if self.health <= 0:
+      print(f'{self.name} is dead.')
+
+class Shadow(Character):
+  def __init__(self):
+    self.name = 'Shadow'
+    self.health = 1
+    self.power = 5
+
+  def receive_damage(self, points):
+    if random.random() >= 0.10:
+      print("Shadow didn't take damage.")
+    else:
+      self.health -= points
+      print(f'{self.name} received {points} damage.') 
+      if self.health <= 0:
+        print(f'{self.name} is dead.')           
+
 class Battle(object):
     def do_battle(self, hero, enemy):
         print("=====================")
